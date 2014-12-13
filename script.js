@@ -41,6 +41,7 @@ Base.Snake = function() {
 		// Reset the direct and the score
 		direction = 'right';
 		score = 0;
+		gameSpeed = 60;
 	
 		// Make the snake
 		create_snake();
@@ -175,6 +176,13 @@ Base.Snake = function() {
 			
 			// Add score
 			score++;
+			
+			clearInterval(game_loop);
+			
+			gameSpeed--;
+			
+			// set up a loop for the game
+			game_loop = setInterval(paint, gameSpeed);
 			
 			//Create new food x y if we've hit it
 			create_food();
