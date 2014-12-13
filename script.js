@@ -48,6 +48,8 @@ Base.Snake = function() {
 		
 		// Create the food 
 		create_food();
+		
+		getHighScore();
 	
 		// game_loop is == a number/object when it kicks in
 		// then we clearInterval, if not we start fresh
@@ -106,6 +108,12 @@ Base.Snake = function() {
 			y: Math.round(Math.random()*(h - snakeBlockSize) / snakeBlockSize),
 			
 		};
+		
+		if(check_collision(food.x, food.y, snake_array)) {
+		
+			create_food();
+		
+		}
 		
 	}
 	
@@ -177,9 +185,15 @@ Base.Snake = function() {
 			// Add score
 			score++;
 			
+			// Need to resent the game and speed it up!
 			clearInterval(game_loop);
 			
-			gameSpeed--;
+			// If Game speed is more than ten count it down one
+			if (gameSpeed > 10) {
+			
+				gameSpeed--;
+			
+			}
 			
 			// set up a loop for the game
 			game_loop = setInterval(paint, gameSpeed);
@@ -291,6 +305,7 @@ Base.Snake = function() {
 
 	});
 	
+	// Submit the players score and check if it tops the list
 	function submitInfo(playerScore) {
 			
 		$.ajax({
@@ -308,6 +323,7 @@ Base.Snake = function() {
 	    
 	}
 	
+	// Find highers score from the server
 	function getHighScore() {
 			
 		$.ajax ({
@@ -325,16 +341,21 @@ Base.Snake = function() {
 	}
 	
 
-	
+	// Gte the players name at the start
 	person = prompt('Please enter your name');
 		
 	if (person != null && registered == false && person != '') {
 	
+		// Add prompt value into person varible
         player = person;
+        
+        // Quick fix for the php, was struggling with this
         var PHPplayer = "-" + player;
         
+        // Update the player name
         $('.player').html(player);
         
+        // Start the game if we ready to go
         init();
         
 	}
